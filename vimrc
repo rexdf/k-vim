@@ -313,7 +313,17 @@ set pastetoggle=<F5>            " when in insert mode, press <F5> to go to
 " disbale paste mode when leaving insert mode
 au InsertLeave * set nopaste
 
-nnoremap <F6> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+function! SyntaxonoffCtrl()
+    if exists("g:syntax_on")
+        syntax off
+    else
+        syntax on
+    endif
+    set nocursorcolumn
+endfunc
+
+"nnoremap <F6> :exec exists('syntax_on') ? 'syn off' : ':call Synon_nocurcol()'<CR>
+nnoremap <F6> :call SyntaxonoffCtrl()<CR>
 
 
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
@@ -578,14 +588,14 @@ map <leader><space> :FixWhitespace<cr>
 
 
 "主题 solarized
-Bundle 'altercation/vim-colors-solarized'
+"Bundle 'altercation/vim-colors-solarized'
 "let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-let g:solarized_contrast="normal"
-let g:solarized_visibility="normal"
+"let g:solarized_termtrans=1
+"let g:solarized_contrast="normal"
+"let g:solarized_visibility="normal"
 
 "主题 molokai
-Bundle 'tomasr/molokai'
+"Bundle 'tomasr/molokai'
 "let g:molokai_original = 1
 
 "################### 快速移动 ###################"
@@ -611,7 +621,7 @@ let g:ycm_complete_in_strings = 1
 "注释和字符串中的文字也会被收入补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
-"let g:ycm_seed_identifiers_with_syntax=1
+let g:ycm_seed_identifiers_with_syntax=1
 let g:ycm_collect_identifiers_from_tags_files = 1
 
 
@@ -708,7 +718,7 @@ Bundle 'nono/jquery.vim'
 Bundle 'Glench/Vim-Jinja2-Syntax'
 
 "for nginx conf file highlight.   need to confirm it works
-"Bundle 'thiderman/nginx-vim-syntax'
+Bundle 'thiderman/nginx-vim-syntax'
 
 "################### 其他 ###################"
 " task list
@@ -721,6 +731,10 @@ Bundle 'tpope/vim-fugitive'
 "edit history, 可以查看回到某个历史状态
 Bundle 'sjl/gundo.vim'
 nnoremap <leader>h :GundoToggle<CR>
+
+Bundle 'uguu-org/vim-matrix-screensaver'
+
+Bundle 'DrawIt'
 
 " end turn on
 filetype plugin indent on
@@ -750,17 +764,18 @@ if has("gui_running")
 endif
 
 " 修改主题和颜色展示
-colorscheme solarized
-set background=dark
+"colorscheme solarized
+"set background=dark
 set t_Co=256
 
 "colorscheme molokai
-"colorscheme desert
+colorscheme desert
 
 "设置标记一列的背景颜色和数字一行颜色一致
 hi! link SignColumn   LineNr
 hi! link ShowMarksHLl DiffAdd
 hi! link ShowMarksHLu DiffChange
+hi! CursorColumn cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 
 "" for error highlight，防止错误整行标红导致看不清
 highlight clear SpellBad
